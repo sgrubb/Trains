@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Arrays;
+
 @SpringBootApplication
 public class App implements CommandLineRunner {
 
@@ -18,7 +20,7 @@ public class App implements CommandLineRunner {
     }
 
     public void run(String... args) {
-        String result = routingService.executeRoutingCommand(args);
+        String result = routingService.executeRoutingCommand(Arrays.asList(args));
         System.out.println("#######################################################\n");
         System.out.println(result);
         System.out.println("\n#######################################################");
