@@ -80,4 +80,45 @@ public class RouteFactoryTest {
         Route result = routeFactory.createRoute(input, routeMap);
         result.calculateDistance();
     }
+
+    @Test
+    public void createRouteShouldCreateShortestRouteIfExists() {
+        // given
+        String input = "AD";
+        City cityA = new City('A', new HashSet<>());
+        City cityB = new City('B', new HashSet<>());
+        City cityC = new City('C', new HashSet<>());
+        City cityD = new City('D', new HashSet<>());
+        cityA.addUnitRoute(new UnitRoute(cityB, 5));
+        cityC.addUnitRoute(new UnitRoute(cityD, 2));
+        cityB.addUnitRoute(new UnitRoute(cityC, 3));
+        cityB.addUnitRoute(new UnitRoute(cityD, 6));
+
+        RouteMap routeMap = new RouteMap(new HashSet<>(Arrays.asList(cityA, cityB, cityC, cityD)));
+
+        // when
+        Route result = routeFactory.createShortestRoute(input, routeMap);
+
+        // then
+        assertThat(result.calculateDistance()).isEqualTo(10);
+    }
+
+    @Test(expected = NoSuchRouteException.class)
+    public void createRouteShouldThrowNoSuchRouteExceptionIfNoRouteExists() {
+        // given
+        String input = "AD";
+        City cityA = new City('A', new HashSet<>());
+        City cityB = new City('B', new HashSet<>());
+        City cityC = new City('C', new HashSet<>());
+        City cityD = new City('D', new HashSet<>());
+        cityA.addUnitRoute(new UnitRoute(cityB, 5));
+        cityB.addUnitRoute(new UnitRoute(cityC, 3));
+        cityC.addUnitRoute(new UnitRoute(cityA, 4));
+        cityD.addUnitRoute(new UnitRoute(cityA, 6));
+
+        RouteMap routeMap = new RouteMap(new HashSet<>(Arrays.asList(cityA, cityB, cityC, cityD)));
+
+        // when
+        routeFactory.createShortestRoute(input, routeMap);
+    }
 }

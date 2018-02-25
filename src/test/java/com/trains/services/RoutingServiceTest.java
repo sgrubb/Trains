@@ -178,4 +178,43 @@ public class RoutingServiceTest {
         // then
         assertThat(result).contains("14");
     }
+
+    @Test
+    public void executeRoutingCommandShouldReturnNoSuchRouteMessageIfCreateShortestRouteRouteThrowsNoPossibleRouteException() {
+        // given
+        List<String> args = Arrays.asList("short", "AD", "AB5", "BC3", "CA4", "DA6");
+        when(routeFactory.createShortestRoute(anyString(), any(RouteMap.class)))
+                .thenThrow(new NoSuchRouteException());
+
+        // when
+        String result = routingService.executeRoutingCommand(args);
+
+        // then
+        assertThat(result).contains("NO SUCH ROUTE");
+    }
+
+    @Test
+    public void executeRoutingCommandShouldReturnShortestDistanceIfCreateShortestRouteReturnsRoute() {
+        // given
+        List<String> args = Arrays.asList("short", "AD", "AB5", "CD2", "BC3", "BD6");
+
+        City cityA = new City('A', new HashSet<>());
+        City cityB = new City('B', new HashSet<>());
+        City cityC = new City('C', new HashSet<>());
+        City cityD = new City('D', new HashSet<>());
+        cityA.addUnitRoute(new UnitRoute(cityB, 5));
+        cityC.addUnitRoute(new UnitRoute(cityD, 2));
+        cityB.addUnitRoute(new UnitRoute(cityC, 3));
+        cityB.addUnitRoute(new UnitRoute(cityD, 6));
+        Route route = new Route(Arrays.asList(cityA, cityB, cityC, cityD));
+
+        when(routeFactory.createShortestRoute(anyString(), any(RouteMap.class)))
+                .thenReturn(route);
+
+        // when
+        String result = routingService.executeRoutingCommand(args);
+
+        // then
+        assertThat(result).contains("10");
+    }
 }

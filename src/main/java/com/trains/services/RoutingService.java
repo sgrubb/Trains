@@ -52,7 +52,8 @@ public class RoutingService {
                     Route route = routeFactory.createRoute(commandInput, routeMap);
                     return route.calculateDistance().toString();
                 case SHORTEST_ROUTE:
-                    return "";
+                    Route shortestRoute = routeFactory.createShortestRoute(commandInput, routeMap);
+                    return shortestRoute.calculateDistance().toString();
                 case NUMBER_OF_TRIPS_WITH_MAXIMUM_STOPS:
                     return "";
                 default:

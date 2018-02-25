@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @Component
 public class RouteMapFactory {
 
-    private static final String routeRegex = "^([A-Z])([A-Z])(\\d+)$";
+    private static final String routeRegex = "^[A-Z][A-Z](\\d+)$";
 
     public RouteMap createRouteMap(List<String> routes) {
         Pattern routePattern = Pattern.compile(routeRegex);
@@ -30,9 +30,9 @@ public class RouteMapFactory {
                 throw new InvalidRouteException();
             }
 
-            char originCityName = routeMatcher.group(1).charAt(0);
-            char destinationCityName = routeMatcher.group(2).charAt(0);
-            int distance = Integer.parseInt(routeMatcher.group(3));
+            char originCityName = route.charAt(0);
+            char destinationCityName = route.charAt(1);
+            int distance = Integer.parseInt(routeMatcher.group(1));
 
             City originCity = getCityByName(cities, originCityName);
             City destinationCity = getCityByName(cities, destinationCityName);

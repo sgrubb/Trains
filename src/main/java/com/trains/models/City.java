@@ -8,14 +8,18 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class City {
+public class City implements Comparable<City> {
 
     private final char name;
     private final Set<UnitRoute> unitRoutes;
+    private int minDistance;
+    private City previousCity;
 
     public City(char name, Set<UnitRoute> unitRoutes) {
         this.name = name;
         this.unitRoutes = unitRoutes;
+
+        minDistance = Integer.MAX_VALUE;
 
         validateUnitRoutes();
     }
@@ -28,10 +32,31 @@ public class City {
         return unitRoutes;
     }
 
+    public int getMinDistance() {
+        return minDistance;
+    }
+
+    public void setMinDistance(int minDistance) {
+        this.minDistance = minDistance;
+    }
+
+    public City getPreviousCity() {
+        return previousCity;
+    }
+
+    public void setPreviousCity(City previousCity) {
+        this.previousCity = previousCity;
+    }
+
     public void addUnitRoute(UnitRoute unitRoute) {
         unitRoutes.add(unitRoute);
 
         validateUnitRoutes();
+    }
+
+    public int compareTo(City other)
+    {
+        return Integer.compare(minDistance, other.getMinDistance());
     }
 
     public int getDistanceTo(City city) {
