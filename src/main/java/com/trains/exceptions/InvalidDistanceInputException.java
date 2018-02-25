@@ -1,8 +1,9 @@
 package com.trains.exceptions;
 
-public class InvalidDistanceInputException extends IllegalArgumentException {
+public class InvalidDistanceInputException extends CommandLineErrorException {
 
     public InvalidDistanceInputException() {
-        super("Invalid distance command input.");
+        super("Please enter a valid distance command input in the format: ABC...\n" +
+                "Which can be any number of letters denoting city names.");
     }
 }

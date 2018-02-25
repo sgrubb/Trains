@@ -1,8 +1,8 @@
 package com.trains.exceptions;
 
-public class NoSuchRouteException extends RuntimeException {
+public class NoSuchRouteException extends CommandLineErrorException {
 
     public NoSuchRouteException() {
-        super("No such route.");
+        super("NO SUCH ROUTE");
     }
 }

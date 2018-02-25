@@ -14,10 +14,11 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class RouteFactory {
 
-    private static final String inputRegex = "^[A-Z]{2,}$";
+    private static final String routeInputRegex = "^[A-Z]{2,}$";
+    private static final String shortestRouteInputRegex = "^([A-Z]{2,})$";
 
     public Route createRoute(String input, RouteMap routeMap) {
-        if (!input.matches(inputRegex)) {
+        if (!input.matches(routeInputRegex)) {
             throw new InvalidDistanceInputException();
         }
 
@@ -26,9 +27,13 @@ public class RouteFactory {
                 .map(cn -> routeMap.getCities().stream()
                         .filter(c -> c.getName() == cn)
                         .findAny()
-                        .orElseThrow(NoSuchCityException::new))
+                        .orElseThrow(() -> new NoSuchCityException(cn)))
                 .collect(toList());
 
         return new Route(cities);
+    }
+
+    public Route createShortestRoute(String input, RouteMap routeMap) {
+        return null;
     }
 }

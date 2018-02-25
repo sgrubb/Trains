@@ -1,8 +1,8 @@
 package com.trains.exceptions;
 
-public class SelfRouteException extends IllegalArgumentException {
+public class SelfRouteException extends CommandLineErrorException {
 
     public SelfRouteException() {
-        super("City cannot have route to itself.");
+        super("Please do not enter a route with the same origin and destination.");
     }
 }

@@ -119,12 +119,13 @@ public class RoutingServiceTest {
         // given
         List<String> args = Arrays.asList("dist", "ABCD", "AB5", "BC3");
         when(routeFactory.createRoute(anyString(), any(RouteMap.class)))
-                .thenThrow(new NoSuchCityException());
+                .thenThrow(new NoSuchCityException('D'));
 
         // when
         String result = routingService.executeRoutingCommand(args);
 
         // then
+        assertThat(result).contains("No such city D");
         assertThat(result).contains("do not enter a distance command input that includes a city not present");
     }
 

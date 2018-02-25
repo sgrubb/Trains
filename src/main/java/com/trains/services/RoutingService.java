@@ -58,24 +58,8 @@ public class RoutingService {
                 default:
                     return "Command not yet implemented.";
             }
-        } catch (CommandNotFoundException e) {
-            List<String> commandAliases = Stream.of(Command.values()).map(Command::getAlias).collect(toList());
-            return "Please enter a valid command as the first argument: " + String.join(" | ", commandAliases);
-        } catch (InvalidRouteException e) {
-            return "Please enter a valid route in the format: AB0.\n" +
-                    "Where A and B are single capital letters denoting city names  +" +
-                    "and 0 is an integer denoting the distance of the route between the two.";
-        } catch (InvalidDistanceInputException e) {
-            return "Please enter a valid distance command input in the format: ABC...\n" +
-                    "Which can be any number of letters denoting city names.";
-        } catch (DuplicateRouteException e) {
-            return "Please do not enter duplicate routes between the same origin and destination.";
-        } catch (SelfRouteException e) {
-            return "Please do not enter a route with the same origin and destination";
-        } catch (NoSuchCityException e) {
-            return "Please do not enter a distance command input that includes a city not present in any provided routes.";
-        } catch (NoSuchRouteException e) {
-            return "NO SUCH ROUTE";
+        } catch (CommandLineErrorException e) {
+            return e.getMessage();
         }
     }
 }
