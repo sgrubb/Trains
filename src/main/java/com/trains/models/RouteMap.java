@@ -29,7 +29,7 @@ public class RouteMap {
     }
 
     public void addCityIfMissing(City city) {
-        if (cities.stream().noneMatch(c -> c.getName() == city.getName())) {
+        if (cities.stream().noneMatch(c -> c.equals(city))) {
             cities.add(city);
         }
     }

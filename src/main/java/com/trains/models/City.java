@@ -4,6 +4,7 @@ import com.trains.exceptions.DuplicateRouteException;
 import com.trains.exceptions.NoSuchRouteException;
 import com.trains.exceptions.SelfRouteException;
 
+import java.util.Objects;
 import java.util.Set;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -54,9 +55,31 @@ public class City implements Comparable<City> {
         validateUnitRoutes();
     }
 
-    public int compareTo(City other)
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        City city = (City) obj;
+        return name == city.name;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name);
+    }
+
+    public boolean equals(City city) {
+        return city.getName() == name;
+    }
+
+    public int compareTo(City city)
     {
-        return Integer.compare(minDistance, other.getMinDistance());
+        return Integer.compare(minDistance, city.getMinDistance());
     }
 
     public int getDistanceTo(City city) {
@@ -69,7 +92,7 @@ public class City implements Comparable<City> {
 
     private void validateUnitRoutes() {
         boolean hasSelfRoute = unitRoutes.stream()
-                .anyMatch(ur -> ur.getDestinationCity().getName() == name);
+                .anyMatch(ur -> ur.getDestinationCity().equals(this));
 
         if (hasSelfRoute) {
             throw new SelfRouteException();

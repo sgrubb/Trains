@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class RoutingService {
@@ -50,12 +47,19 @@ public class RoutingService {
             switch (command) {
                 case DISTANCE_OF_ROUTE:
                     Route route = routeFactory.createRoute(commandInput, routeMap);
-                    return route.calculateDistance().toString();
+                    return Integer.toString(route.calculateDistance());
                 case SHORTEST_ROUTE:
                     Route shortestRoute = routeFactory.createShortestRoute(commandInput, routeMap);
-                    return shortestRoute.calculateDistance().toString();
-                case NUMBER_OF_TRIPS_WITH_MAXIMUM_STOPS:
-                    return "";
+                    return Integer.toString(shortestRoute.calculateDistance());
+                case NUMBER_OF_ROUTES_WITH_STOPS:
+                    List<Route> routesWithStops = routeFactory.createAllRoutesWithExactStops(commandInput, routeMap);
+                    return Integer.toString(routesWithStops.size());
+                case NUMBER_OF_ROUTES_WITH_MAXIMUM_STOPS:
+                    List<Route> routesWithMaxStops = routeFactory.createAllRoutesWithMaxStops(commandInput, routeMap);
+                    return Integer.toString(routesWithMaxStops.size());
+                case NUMBER_OF_ROUTES_WITH_MAXIMUM_DISTANCE:
+                    List<Route> routesWithMaxDistance = routeFactory.createAllRoutesWithMaxDistance(commandInput, routeMap);
+                    return Integer.toString(routesWithMaxDistance.size());
                 default:
                     return "Command not yet implemented.";
             }

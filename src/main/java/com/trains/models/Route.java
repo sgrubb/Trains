@@ -10,7 +10,11 @@ public class Route {
         this.cities = cities;
     }
 
-    public Integer calculateDistance() {
+    public List<City> getCities() {
+        return cities;
+    }
+
+    public int calculateDistance() {
         // Is there a neater way to do this??
         int distance = 0;
         for (int i = 0; i < cities.size() - 1; i++) {

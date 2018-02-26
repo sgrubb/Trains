@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -151,7 +152,7 @@ public class RoutingServiceTest {
         String result = routingService.executeRoutingCommand(args);
 
         // then
-        assertThat(result).contains("NO SUCH ROUTE");
+        assertThat(result).isEqualTo("NO SUCH ROUTE");
     }
 
     @Test
@@ -176,11 +177,11 @@ public class RoutingServiceTest {
         String result = routingService.executeRoutingCommand(args);
 
         // then
-        assertThat(result).contains("14");
+        assertThat(result).isEqualTo("14");
     }
 
     @Test
-    public void executeRoutingCommandShouldReturnNoSuchRouteMessageIfCreateShortestRouteRouteThrowsNoPossibleRouteException() {
+    public void executeRoutingCommandShouldReturnNoSuchRouteMessageIfCreateShortestRouteThrowsNoPossibleRouteException() {
         // given
         List<String> args = Arrays.asList("short", "AD", "AB5", "BC3", "CA4", "DA6");
         when(routeFactory.createShortestRoute(anyString(), any(RouteMap.class)))
@@ -190,7 +191,7 @@ public class RoutingServiceTest {
         String result = routingService.executeRoutingCommand(args);
 
         // then
-        assertThat(result).contains("NO SUCH ROUTE");
+        assertThat(result).isEqualTo("NO SUCH ROUTE");
     }
 
     @Test
@@ -215,6 +216,88 @@ public class RoutingServiceTest {
         String result = routingService.executeRoutingCommand(args);
 
         // then
-        assertThat(result).contains("10");
+        assertThat(result).isEqualTo("10");
+    }
+
+    @Test
+    public void executeRoutingCommandShouldReturnNumberOfRoutesIfCreateAllRoutesWithExactStopsReturnsRoute() {
+        // given
+        List<String> args = Arrays.asList("stops", "AD3", "AB5", "CD2", "BC3", "BD6");
+
+        City cityA = new City('A', new HashSet<>());
+        City cityB = new City('B', new HashSet<>());
+        City cityC = new City('C', new HashSet<>());
+        City cityD = new City('D', new HashSet<>());
+        cityA.addUnitRoute(new UnitRoute(cityB, 5));
+        cityC.addUnitRoute(new UnitRoute(cityD, 2));
+        cityB.addUnitRoute(new UnitRoute(cityC, 3));
+        cityB.addUnitRoute(new UnitRoute(cityD, 6));
+
+        Route route = new Route(Arrays.asList(cityA, cityB, cityC, cityD));
+        List<Route> routes = Collections.singletonList(route);
+
+        when(routeFactory.createAllRoutesWithExactStops(anyString(), any(RouteMap.class)))
+                .thenReturn(routes);
+
+        // when
+        String result = routingService.executeRoutingCommand(args);
+
+        // then
+        assertThat(result).isEqualTo("1");
+    }
+
+    @Test
+    public void executeRoutingCommandShouldReturnNumberOfRoutesIfCreateAllRoutesWithMaxStopsReturnsRoute() {
+        // given
+        List<String> args = Arrays.asList("maxstops", "AD3", "AB5", "CD2", "BC3", "BD6");
+
+        City cityA = new City('A', new HashSet<>());
+        City cityB = new City('B', new HashSet<>());
+        City cityC = new City('C', new HashSet<>());
+        City cityD = new City('D', new HashSet<>());
+        cityA.addUnitRoute(new UnitRoute(cityB, 5));
+        cityC.addUnitRoute(new UnitRoute(cityD, 2));
+        cityB.addUnitRoute(new UnitRoute(cityC, 3));
+        cityB.addUnitRoute(new UnitRoute(cityD, 6));
+
+        Route route1 = new Route(Arrays.asList(cityA, cityB, cityC, cityD));
+        Route route2 = new Route(Arrays.asList(cityA, cityB, cityD));
+        List<Route> routes = Arrays.asList(route1, route2);
+
+        when(routeFactory.createAllRoutesWithMaxStops(anyString(), any(RouteMap.class)))
+                .thenReturn(routes);
+
+        // when
+        String result = routingService.executeRoutingCommand(args);
+
+        // then
+        assertThat(result).isEqualTo("2");
+    }
+
+    @Test
+    public void executeRoutingCommandShouldReturnNumberOfRoutesIfCreateAllRoutesWithMaxDistanceReturnsRoute() {
+        // given
+        List<String> args = Arrays.asList("maxdist", "AD11", "AB5", "CD2", "BC3", "BD6");
+
+        City cityA = new City('A', new HashSet<>());
+        City cityB = new City('B', new HashSet<>());
+        City cityC = new City('C', new HashSet<>());
+        City cityD = new City('D', new HashSet<>());
+        cityA.addUnitRoute(new UnitRoute(cityB, 5));
+        cityC.addUnitRoute(new UnitRoute(cityD, 2));
+        cityB.addUnitRoute(new UnitRoute(cityC, 3));
+        cityB.addUnitRoute(new UnitRoute(cityD, 6));
+
+        Route route = new Route(Arrays.asList(cityA, cityB, cityC, cityD));
+        List<Route> routes = Collections.singletonList(route);
+
+        when(routeFactory.createAllRoutesWithMaxDistance(anyString(), any(RouteMap.class)))
+                .thenReturn(routes);
+
+        // when
+        String result = routingService.executeRoutingCommand(args);
+
+        // then
+        assertThat(result).isEqualTo("1");
     }
 }

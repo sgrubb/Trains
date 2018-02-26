@@ -7,7 +7,9 @@ import java.util.stream.Stream;
 public enum Command {
     DISTANCE_OF_ROUTE("dist"),
     SHORTEST_ROUTE("short"),
-    NUMBER_OF_TRIPS_WITH_MAXIMUM_STOPS("ntwms");
+    NUMBER_OF_ROUTES_WITH_STOPS("stops"),
+    NUMBER_OF_ROUTES_WITH_MAXIMUM_STOPS("maxstops"),
+    NUMBER_OF_ROUTES_WITH_MAXIMUM_DISTANCE("maxdist");
 
     private final String alias;
 
